@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/header :: common-header"/>
+
+<body>
+<div class="wrapper">
+    <div th:replace="common/header ::common-sidebar"/>
+    <div class="main-panel">
+        <div th:replace="common/header :: common-navbar"/>
+        <div class="content">
+            <div class="container-fluid">
+
+                <!--table-->
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+
+                        <div class="card card-pad">
+                            <h5 style="color:black;font-weight:bold;"><i>Module List</i></h5>
+                            <div class="table-responsive">
+                                <table id="exampleTable" class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>S.N.</th>
+                                        <th>Module Name</th>
+                                        <th>Name Abbreviation</th>
+                                        <th>Remarks</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="module,i : ${modules}">
+                                        <td th:text="${i.count}"></td>
+                                        <td th:text="${module.moduleName}"></td>
+                                        <td th:text="${module.moduleAbbreviation}"></td>
+                                        <td th:text="${module.remarks}"></td>
+                                        <td th:if="${module.status == 1}">
+                                            <span class="badge badge-success">active</span>
+                                        </td>
+                                        <td th:if="${module.status == 0}">
+                                            <span class="badge badge-danger">inactive</span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:replace="common/footer :: footer"></div>
+        <div th:replace="common/footer :: scriptone"></div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+<script>
+
+
+    $("#addModuleForm").submit(function (e) {
+        e.preventDefault();
+        const requestData = {
+            "moduleName": $('#mName').val(),
+            "moduleAbbreviation":$('#mnAbbr').val(),
+            "remarks": $('#remarks').val(),
+            "status": 1,
+        }
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(requestData),
+            url: RELATIVE_URL_INIT+`admin/module_/`,
+            success: () => {
+                window.location.reload();
+            },
+            error: err => {
+                console.log('err ', err.message);
+            }
+        });
+    })
+
+
+    $('#exampleTable').DataTable();
+    function showSpinner() {
+        document.getElementById("loadingMessage").innerHTML = "Fetching list, please wait...";
+    }
+    setTimeout(function () {
+        document.getElementById("messageField").setAttribute("style", "display:none;");
+    }, 30000);
+
+</script>
+</body>
+</html>

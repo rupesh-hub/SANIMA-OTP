@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/header :: common-header"/>
+<body>
+<div class="wrapper">
+    <div th:replace="common/header ::common-sidebar"/>
+    <div class="main-panel">
+        <div th:replace="common/header :: common-navbar"/>
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div class="card card-pad">
+                            <h5 style="color:black;font-weight:bold;"><i>Add Branch</i></h5>
+                            <form method="post" id="addBranchForm" action="#">
+                                <div class="row">
+
+                                    <div class="col-md-3">
+                                        <input id="branchId" type="hidden"/>
+                                        <label class="dpxImportLabel" for="name">Branch name</label>
+                                        <input required class="form-control" type="text" id="name" autofocus="true"
+                                               autocomplete="off"/>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label class="dpxImportLabel" for="address">Address</label>
+                                        <input required class="form-control" type="text" id="address"
+                                               autofocus="true" autocomplete="off"/>
+                                    </div>
+
+                                    <div class="col-md-3 mt-4">
+                                        <button type="submit" class="btn btn-primary btnStyle">submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!--user list table start-->
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+
+                        <div class="card card-pad">
+                            <h5 style="font-weight: bold; font-style: italic; color: #000;">Branch records</h5>
+                            <div class="table-responsive">
+                                <table class="table" id="branchTable">
+                                    <thead>
+                                    <tr>
+                                        <th>S.N.</th>
+                                        <th role="col">Branch Name</th>
+                                        <th role="col">Address</th>
+                                        <th role="col">Status</th>
+                                        <th role="col">Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tdata class="text-dark">
+                                        <tr th:each="branch,i: ${branchList}">
+                                            <td th:text="${i.count}"></td>
+                                            <td th:text="${branch.name}"></td>
+                                            <td th:text="${branch.address}"></td>
+
+                                            <td th:if="${branch.status}">
+                                                <span class="badge badge-success"
+                                                      data-toggle="modal"
+                                                      data-target="#exampleModalCenter"
+                                                      th:attr="data-target='#exampleModalCenter'+${branch.id}"
+                                                      style="cursor: pointer">
+                                                    active
+                                                </span>
+                                            </td>
+
+                                            <td th:if="${branch.status == false}">
+                                                <span class="badge badge-danger"
+                                                      data-toggle="modal"
+                                                      data-target="#exampleModalCenter"
+                                                      th:attr="data-target='#exampleModalCenter'+${branch.id}"
+                                                      style="cursor: pointer">
+                                                    inactive
+                                                </span>
+                                            </td>
+
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-info"
+                                                        th:onclick='editMe([[${{branch.id}}]])'>
+                                                    edit
+                                                </button>
+                                            </td>
+
+
+                                            <div class="modal fade"
+                                                 id="exampleModalCenter"
+                                                 th:id="exampleModalCenter+${branch.id}"
+                                                 tabindex="-1"
+                                                 role="dialog"
+                                                 aria-labelledby="exampleModalCenterTitle"
+                                                 aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title text-light bg-danger p-3 rounded"
+                                                                th:if="${branch.status}">Disable branch ?</h5>
+                                                            <h5 class="modal-title text-light bg-success p-3 rounded"
+                                                                th:if="${branch.status == false}">Enable branch ?</h5>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-outline-danger btn-sm mr-1"
+                                                                    data-dismiss="modal">Cancel
+                                                            </button>
+                                                            <a class="btn btn-outline-primary btn-sm"
+                                                               th:if="${branch.status}"
+                                                               th:href="@{/branch_/changeStatus_/{id}(id=${branch.id})}">Disable</a>
+                                                            <a class="btn btn-outline-primary btn-sm"
+                                                               th:if="${branch.status == false}"
+                                                               th:href="@{/branch_/changeStatus_/{id}(id=${branch.id})}">Enable</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </tr>
+                                    </tdata>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div th:replace="common/footer :: footer"></div>
+        <div th:replace="common/footer :: scriptone"></div>
+    </div>
+</div>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+<script>
+
+    $('#exampleTable').DataTable();
+    $("#addBranchForm").submit(function (e) {
+        e.preventDefault();
+        let roleList = [$('#roleListSelect').val()];
+        roleList.push();
+
+        let requestData = {
+            "id": $('#branchId').val(),
+            "name": $('#name').val(),
+            "address": $('#address').val(),
+            "status": 1,
+        }
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(requestData),
+            url: RELATIVE_URL_INIT + `branch_`,
+            success: () => {
+                window.location.reload();
+            },
+            error: err => {
+                console.log('err ', err.message);
+            }
+        });
+    })
+    $('#branchTable').DataTable();
+
+
+    function editMe(id) {
+        console.log(id)
+        const URL = RELATIVE_URL_INIT + `branch_/id/${id}`;
+
+        $.ajax({
+            url: URL,
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function (branchDto) {
+                console.log(branchDto)
+                $('#branchId').val(branchDto.id);
+                $('#name').val(branchDto.name);
+                $('#address').val(branchDto.address);
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

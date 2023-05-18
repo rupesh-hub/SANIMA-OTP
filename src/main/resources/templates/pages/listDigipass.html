@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/header :: common-header"/>
+
+<body>
+<div class="wrapper">
+    <div th:replace="common/header ::common-sidebar"/>
+    <div class="main-panel">
+        <div th:replace="common/header :: common-navbar"/>
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div class="card card-pad">
+                            <h5 style="color:black;font-weight:bold;"><i>List Digipass Keys</i></h5>
+                            <!--export ex-cell ui goes here-->
+                            <div class="w-100">
+                                <a class="btn btn-sm btn-primary" style="float: right" th:href="@{/export-excel}">
+                                    <i class="material-icons">file_download</i> export
+                                </a>
+
+                            </div>
+                            <!--ui end-->
+                            <div class="tableexample">
+                                <table id="digipassTable" class="table-bordered">
+<!--                                    <thead>-->
+<!--                                    <tr>-->
+<!--                                        <th>SerialNumber</th>-->
+<!--                                        <th>MobileId</th>-->
+<!--                                        <th>KioskId</th>-->
+<!--                                        <th>AtmId</th>-->
+<!--                                        <th>VbvId</th>-->
+<!--                                        <th>InternetBankId</th>-->
+<!--                                        <th>Vbv_CR_Id</th>-->
+<!--                                        <th>Kiosk_CR_Id</th>-->
+<!--                                        <th>Central Id</th>-->
+<!--                                        <th>Status</th>-->
+<!--                                    </tr>-->
+<!--                                    </thead>-->
+                                    <!--                                    <tbody>-->
+                                    <!--                                    <tr th:each="tData : ${data}">-->
+                                    <!--                                        <td th:text="${tData.SerialNumber}">SerialNumber</td>-->
+                                    <!--                                        <td th:text="${tData.MobileId}">MobileId</td>-->
+                                    <!--                                        <td th:text="${tData.KioskId}">KioskId</td>-->
+                                    <!--                                        <td th:text="${tData.AtmId}">AtmId</td>-->
+                                    <!--                                        <td th:text="${tData.VbvId}">VbvId</td>-->
+                                    <!--                                        <td th:text="${tData.InternetBankId}">InternetBankId</td>-->
+                                    <!--                                        <td th:text="${tData.Vbv_CR_Id}">Vbv_CR_Id</td>-->
+                                    <!--                                        <td th:text="${tData.Kiosk_CR_Id}">Kiosk_CR_Id</td>-->
+                                    <!--                                        <td th:text="${tData.Central_Id}">Central Id</td>-->
+                                    <!--                                        <td th:text="${tData.Status}">Status</td>-->
+                                    <!--                                    </tr>-->
+                                    <!--                                    </tbody>-->
+                                </table>
+                            </div>
+                        </div>
+
+                        <div style="width:35%;">
+                            <div id="messageField" th:text="${message}"
+                                 th:style="${status}?'color:green;background-color:white;padding:5px;border-radius:5px;':'color:red;'"/>
+                            <div id="loadingMessage"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:replace="common/footer :: footer"></div>
+        <div th:replace="common/footer :: scriptone"></div>
+    </div>
+</div>
+<!--<script src="https://code.jquery.com/jquery-3.3.1.js"></script>-->
+<script th:src="@{/css/jquery.dataTables.min.js}"></script>
+<script>
+
+
+    //    $('#exampleTable').DataTable();
+
+    function showSpinner() {
+        document.getElementById("loadingMessage").innerHTML = "Fetching list, please wait...";
+    }
+
+    setTimeout(function () {
+        document.getElementById("messageField").setAttribute("style", "display:none;");
+    }, 30000);
+
+    $(document).ready(function () {
+        $('#digipassTable').DataTable({
+            'paging': true,
+            'ordering': false,
+            'search' : {
+                return: true,
+            },
+            "processing": true,
+            "serverSide": true,
+            "bInfo" : false,
+            "columns": [
+                {"data": "serialNumber", "name":"serialNumber", "title":"SerialNumber"},
+                {"data": "status", "name": "status", "title": "Status"},
+                {"data": "centralId", "name": "centralId", "title": "CentralId"},
+                {"data": "app1Mb", "name": "app1Mb", "title": "MobileId"},
+                {"data": "app2Kiosk", "name": "app2Kiosk", "title": "KioskId"},
+                {"data": "app3Atm", "name": "app3Atm", "title": "AtmId"},
+                {"data": "app4Vbv", "name": "app4Vbv", "title": "VbvId"},
+                {"data": "app5Ibank", "name": "app5Ibank", "title": "InternetBankId"},
+                {"data": "app6VbvCr", "name": "app6VbvCr", "title": "Vbv_CR_Id"},
+                {"data": "app7Kioskcr", "name": "app7Kioskcr", "title": "Kiosk_CR_Id"}
+            ],
+            "ajax": {
+                "url": BASE_URL_NO_API+"listDigipass_/list",
+                "type": "GET",
+                "dataType": "json",
+                "contentType": "application/json",
+                // "success": (data) => {
+                //     console.log("Api Call Success");
+                //     console.log(data);
+                // },
+                "error": (error) => {
+                    console.log("Api Call Failure");
+                    console.log(error)
+                }
+            },
+        });
+
+    });
+
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+spring:
+  profiles:
+    active: prod
+
+
+
+
+
+
+
+
+
+
+
+
+

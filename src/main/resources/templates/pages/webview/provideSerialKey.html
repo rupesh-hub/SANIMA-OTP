@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Get Activation code</title>
+    <link rel="stylesheet" th:href="@{/assets/css/material-dashboard.min790f.css?v=2.0.1}">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css"/>
+
+
+    <style>
+        .ac-head{
+            font-weight: 600;
+        }
+    </style>
+
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card mb-2">
+                <div class="card-body px-0">
+                    <div class="container-fluid">
+                        <h5 class="mb-0 ac-head">Serial key</h5>
+                    </div>
+                    <div class="container-fluid d-flex align-items-center justify-content-between">
+                        <span th:text="${sk}"></span>
+                        <button class="btn btn-success btn-sm"><i class="fa fa-files-o" aria-hidden="true"></i> Copy</button>
+                    </div>
+                    <hr>
+                    <div class="container-fluid">
+                        <h5 class="mb-0 ac-head">Activation code</h5>
+                    </div>
+                    <div class="container-fluid d-flex align-items-center justify-content-between">
+                        <span th:text="${ac}"></span>
+                        <button class="btn btn-success btn-sm"><i class="fa fa-files-o" aria-hidden="true"></i> Copy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card mt-2">
+                <div class="card-body px-0">
+                    <div class="container-fluid">
+                        <form action="#" th:action="@{/view/activateSerialKey}" th:object="${derivationCode}" method="post">
+                            <p style="display:none;">Channel Id: <input name="channelId"  type="text" th:value="${channelId}"/></p>
+                            <p style="display:none;">Central Id: <input name="centralId" type="text" th:value="${centralId}"/></p>
+                            <p style="display:none;">Application Id: <input name="applicationId" type="text" th:value="${applicationId}"/></p>
+                            <img th:src="${url}" class="img-fluid mb-3" />
+                            <div class="form-group">
+                                <label for="derivationCode">
+                                    Enter first OTP here
+                                </label>
+                                <input name="derivationCode" id="derivationCode" class="form-control" type="text" required/>
+                            </div>
+                            <input type="submit" value="Submit" class="btn btn-success btn-sm" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div th:unless="${status}">
+    <div>Couldn't extract serial key !!</div>
+    <div th:text="${message}"></div>
+</div>
+
+<script th:src="@{/assets/js/core/jquery.min.js}"></script>
+<script th:src="@{/assets/js/bootstrap-material-design.min.js}"></script>
+<script th:src="@{/assets/js/material-dashboard790f.js?v=2.0.1}"></script>
+<script th:src="@{/assets/js/plugins/demo.js}"></script>
+<script th:src="@{/assets/js/custom.js}"></script>
+
+
+</body>
+</html>

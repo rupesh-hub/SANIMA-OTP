@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/header :: common-header"/>
+<body>
+<div class="wrapper">
+    <div th:replace="common/header ::common-sidebar"/>
+    <div class="main-panel">
+        <div th:replace="common/header :: common-navbar"/>
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+
+                        <div class="card card-pad">
+                            <h5 style="color:black;font-weight:bold;"><i>Add Role</i></h5>
+                            <form method="post" id="addRoleForm" action="#">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label class="dpxImportLabel">Role name</label>
+                                        <input class="form-control" type="hidden" id="id"/>
+                                        <input required class="form-control" type="text" id="roleName"/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="dpxImportLabel">Role description</label>
+                                        <input required class="form-control" type="text" id="roleDesc"/>
+                                    </div>
+                                    <div class="col-md-12 mt-2">
+                                        <button type="submit" class="btn btn-primary btnStyle">submit</button>
+                                    </div>
+                                    <div class="col-md-6" id="addingRoleMessage"></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div class="card card-pad">
+                            <h5 style="color:black;font-weight:bold;"><i>Role List</i></h5>
+
+                            <div class="table-responsive">
+                                <table id="exampleTable" class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>S.N.</th>
+                                        <th>Role Name</th>
+                                        <th>Role Description</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="role,i : ${roleList}">
+                                        <td th:text="${i.count}"></td>
+                                        <td th:text="${role.name}"></td>
+                                        <td th:text="${role.description}"></td>
+
+                                        <td th:if="${role.status == 1}">
+                                            <span class="badge badge-success">active</span>
+                                        </td>
+                                        <td th:if="${role.status == 0}">
+                                            <span class="badge badge-danger">inactive</span>
+                                        </td>
+                                        <td>
+                                            <button class="btn-sm btn-outline-primary btn" th:onclick='editMe([[${role.getId}]])'>edit</button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:replace="common/footer :: footer"></div>
+        <div th:replace="common/footer :: scriptone"></div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script>
+    $("#addRoleForm").submit(function (e) {
+        e.preventDefault();
+        let name = $('#roleName').val();
+        let nameList = name.split(" ");
+        let finalRoleName = "";
+        if (nameList.length > 0) {
+            for (let i = 0; i < nameList.length; i++ in nameList) {
+                if (i == 0) {
+                    finalRoleName = finalRoleName + nameList[i];
+                } else {
+                    finalRoleName = finalRoleName + "_" + nameList[i];
+                }
+            }
+        } else {
+            finalRoleName = name;
+        }
+        let requestData = {
+            "id": $('#id').val(),
+            "roleName": finalRoleName.toUpperCase(),
+            "roleDescription": $('#roleDesc').val(),
+        }
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(requestData),
+            url: RELATIVE_URL_INIT + `role_/addRole_`,
+            success: () => {
+                window.location.reload();
+            },
+            error: err => {
+                console.log('err ', err.message);
+            }
+        });
+    });
+
+    $('#exampleTable').DataTable();
+
+    function showSpinner() {
+        document.getElementById("loadingMessage").innerHTML = "Activating DPX please wait...";
+    }
+
+    function activateDigipass(e) {
+        e.preventDefault();
+        alert("here")
+    }
+
+    setTimeout(function () {
+        document.getElementById("addingRoleMessage").setAttribute("style", "display:none;");
+    }, 30000)
+
+
+    function editMe(id) {
+        const URL = RELATIVE_URL_INIT+`role_/${id}`;
+
+        $.ajax({
+            url: URL,
+            type: 'get',
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function (data) {
+                $('#id').val(data.id);
+                $('#roleName').val(data.name);
+                $('#roleDesc').val(data.description);
+            }
+        });
+    }
+</script>
+
+
+</body>
+</html>

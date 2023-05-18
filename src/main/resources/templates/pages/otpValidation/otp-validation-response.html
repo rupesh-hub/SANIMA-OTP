@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/header :: common-header"/>
+<body>
+<div class="wrapper">
+    <div th:replace="common/header ::common-sidebar"/>
+    <div class="main-panel">
+        <div th:replace="common/header :: common-navbar"/>
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!--show list-->
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <h5 style="font-weight:bold;color: #000;"><i>Digipass approve response</i></h5>
+                        <div class="card card-pad">
+                            <div class="table-responsive">
+
+
+                                <table id="newDigipassTable" class="table">
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top:15px;">
+                    <div class="col-md-4" style="margin-left:10px;">
+                        <span id="activateDataId"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:replace="common/footer :: footer"></div>
+        <div th:replace="common/footer :: scriptone"></div>
+    </div>
+</div>
+<script th:src="@{/css/jquery.dataTables.min.js}"></script>
+<script>
+    $(document).ready(function () {
+        $('#newDigipassTable').DataTable({
+            "createdRow": function(row, data, dataIndex) {
+                $(row).find('td:eq(0)').html(dataIndex+1);
+                if (data.approvalStatus === 'APPROVED'){
+                    $(row).find('td:eq(3)').html('<span class="badge badge-success">'+data.approvalStatus+'</span>')
+                }else if (data.approvalStatus === 'DEACTIVATED' || data.approvalStatus === 'REJECTED'){
+                    $(row).find('td:eq(3)').html('<span class="badge badge-danger">'+data.approvalStatus+'</span>');
+                }else {
+                    $(row).find('td:eq(3)').html('<span class="badge badge-warning">'+data.approvalStatus+'</span>');
+                }
+            },
+            'paging': true,
+            'ordering': false,
+            'search' : {
+                return: true,
+            },
+            "processing": true,
+            "serverSide": true,
+            "bInfo" : false,
+            "columns": [
+                {"data": "applicationType", "name": "applicationType", "title": "App Type"},
+                {"data": "applicationId", "name": "applicationId", "title": "App Id"},
+                {"data": "centralId", "name": "centralId", "title": "Customer Id"},
+                {"data": "approvalStatus", "name": "approvalStatus", "title": "Approval Status"},
+                {"data": "Action", "title": "Action"}
+            ],
+            columnDefs: [{
+                // puts a button in the last column
+                targets: [-1], render: function (a, b, data, d) {
+                    if (data.approvalStatus==='PENDING' || data.approvalStatus==='pending'){
+                        return '<a class="btn-sm btn btn-outline-success" href="/digipassApprove_/approve/' + data.id + '">Approve</a> ' +
+                            '<button data-toggle="modal" data-target="#exampleModalCenter'+data.id+'" class="btn-sm btn btn-outline-danger">Reject</button> ' +
+                            '<div class="modal fade" id="exampleModalCenter'+data.id+'" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">' +
+                            '<div class="modal-dialog modal-dialog-centered" role="document">' +
+                            '<div class="modal-content">' +
+                            '<div class="modal-header row">' +
+                            '<div class="col-md-12">' +
+                            '<h5 class="modal-title text-light bg-danger p-3 rounded font-weight-bold">Are you sure you want to reject approval ?</h5>' +
+                            '</div><br/>' +
+                            '<div class="form-group col-md-12">' +
+                            '<label for="remarks" class="text-danger"> Remarks <superscript>*</superscript></label>' +
+                            '<textarea class="form-control w-100" id="remarks" rows="3" cols="60"></textarea>' +
+                            '<input type="hidden" value="'+data.id+'" id="digiPassId"></div></div>' +
+                            '<div class="modal-footer">' +
+                            '<button onclick="clickMe('+data.id+')" class="btn btn-outline-danger btn-sm" id="isConfirmed">REJECT</button>' +
+                            '<button class="btn btn-outline-warning btn-sm ml-2" data-dismiss="modal">Cancel</button>' +
+                            '</div></div></div></div>'
+                    }
+                    return "";
+                }
+            }],
+            "ajax": {
+                "url": BASE_URL_NO_API+"digipassApprove_/digpass-approve/list",
+                "type": "GET",
+                "dataType": "json",
+                "contentType": "application/json",
+                // "success": (data) => {
+                //     console.log("Api Call Success");
+                //     console.log(data);
+                // },
+                "error": (error) => {
+                    console.log("Api Call Failure");
+                    console.log(error)
+                }
+            },
+        });
+
+    });
+
+    let apiDetials =
+        {
+            controllerName: "getActivationCode",
+            apiMessageDisplayId: "activateDataId",
+            loadingMessage: "Geting activation code,please wait..."
+        };
+    $("#getActivationCode").submit(function (e) {
+        e.preventDefault();
+        let requestData = {
+            "channelId": $('#channelId').val(),
+            "centralId": $('#centralId').val(),
+            "applicationId": $('#applicationId').val(),
+        }
+        $("#serialKeyId").html("");
+        $("#activationCodeId").html("");
+        $("#imageId").attr("src", "");
+        makeApiRequest("post", apiDetials, requestData, function (res) {
+            if (res.data) {
+                let sk = res.data.data.serialKey;
+                let ac = res.data.data.activationCode;
+
+                $("#serialKeyId").html(sk);
+                $("#serId").attr("style", "color:black;padding:10px;");
+                $("#activationCodeId").html(ac);
+                $("#actId").attr("style", "color:black;padding:10px;");
+                $("#imageId").attr("src", res.data.data.url);
+            }
+
+        })
+
+    })
+
+    // $('#exampleTable').DataTable();
+
+
+    function remarksRequired(value, btnId) {
+        value = value.trim();
+        if (value.length <= 0) {
+            $(btnId).attr('disabled', true);
+            $(btnId).attr('title', 'Please enter remarks to continue');
+            $(btnId).css('cursor', 'not-allowed');
+        } else {
+            $(btnId).attr('disabled', false);
+            $(btnId).attr('title', 'Continue');
+            $(btnId).css('cursor', 'pointer');
+        }
+    }
+
+
+    function clickMe(ID) {
+        $("#isConfirmed").attr('disabled', 'true');
+        $("#isConfirmed").css('cursor', 'not-allowed');
+
+        $.ajax({
+            url: RELATIVE_URL_INIT+`digipassApprove_/reject/${ID}/`,
+            type: 'GET',
+            contentType: 'application/json;charset=UTF-8',
+            success: () => {
+                window.location.reload();
+            },
+            error: (err) => {
+                console.log(err)
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

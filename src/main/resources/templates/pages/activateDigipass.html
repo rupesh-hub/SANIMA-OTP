@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/header :: common-header"/>
+<body>
+<div class="wrapper">
+    <div th:replace="common/header ::common-sidebar"/>
+    <div class="main-panel">
+        <div th:replace="common/header :: common-navbar"/>
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <h5 style="color:black;font-weight:bold;"><i>Activate Digipass</i></h5>
+                        <div class="card card-pad">
+                            <form method="post" id="activateDigipass" action="#">
+                                <div class="row">
+
+                                    <div class="col-md-3">
+                                        <label class="dpxImportLabel">Enter derivation code</label>
+                                        <input required class="form-control" type="text" name="derivationCode"/>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="dpxImportLabel">Select application</label>
+                                        <select required class="form-control" id="channelId">
+                                            <option selected value="">Select app</option>
+                                            <option value="APP1_MB">APP1_MB</option>
+                                            <option value="APP2_KIOSK">APP2_KIOSK</option>
+                                            <option value="APP3_ATM">APP3_ATM</option>
+                                            <option value="APP4_VBV">APP4_VBV</option>
+                                            <option value="APP5_IBANK">APP5_IBANK</option>
+                                            <option value="APP6_VBV_CR">APP6_VBV_CR</option>
+                                            <option value="APP7_KIOSKCR">APP7_KIOSKCR</option>
+                                            <option value="APP8_FT_SIG">APP8_FT_SIG</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="dpxImportLabel">Enter application id</label>
+                                        <input required class="form-control" type="text" name="applicationId"/>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="dpxImportLabel">Enter customer id</label>
+                                        <input required class="form-control" type="text" name="centralId"/>
+                                    </div>
+
+                                    <div class="col-md-12 mt-2">
+                                        <button type="submit" class="btn btn-primary btnStyle">submit</button>
+                                    </div>
+                                    <div class="col-md-12" id="activateDigipassMessage"></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:replace="common/footer :: footer"></div>
+        <div th:replace="common/footer :: scriptone"></div>
+    </div>
+</div>
+<script>
+    $("#activateDigipass").submit(function (e) {
+        e.preventDefault();
+        let requestData = {
+            "derivationCode": $('#activateDigipass').find('input[name="derivationCode"]').val(),
+            "channelId": $('#channelId').val(),
+            "centralId": $('#activateDigipass').find('input[name="centralId"]').val(),
+            "applicationId": $('#activateDigipass').find('input[name="applicationId"]').val(),
+        }
+        makeApiRequest("post", {
+            controllerName: "activateSerialKey",
+            apiMessageDisplayId: "activateDigipassMessage",
+            loadingMessage: "Activating please wait.."
+        }, requestData, function (response) {
+            console.log(response)
+        })
+    })
+
+    function showSpinner() {
+        document.getElementById("loadingMessage").innerHTML = "Activating DPX please wait...";
+    }
+
+    setTimeout(function () {
+        document.getElementById("messageField").setAttribute("style", "display:none;");
+    }, 30000)
+
+</script>
+
+
+</body>
+</html>

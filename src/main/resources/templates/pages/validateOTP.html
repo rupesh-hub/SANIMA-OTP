@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/header :: common-header"/>
+<body>
+<div class="wrapper">
+    <div th:replace="common/header ::common-sidebar"/>
+    <div class="main-panel">
+        <div th:replace="common/header :: common-navbar"/>
+        <div class="content">
+            <h5 style="color:black;font-weight:bold;"><i>Validate OTP</i></h5>
+            <div class="container-fluid card card-pad mt-0">
+                <div class="row">
+                    <div class="col-md-6 otpValidationBox">
+                        <div>
+                            <form method="post" id="mobileBanking" action="#">
+                                <div class="row">
+                                    <div class="col-md-12"><h4 style="font-weight: bolder;color:black;">Mobile Banking
+                                        (RO Mode)</h4>
+                                        <hr/>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label class="dpxImportLabel">Enter OTP</label>
+                                        <input required class="form-control" type="text" name="otp"/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="dpxImportLabel">Central Id</label>
+                                        <input required class="form-control" type="text" name="centralId"/>
+
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="dpxImportLabel">Application Id</label>
+                                        <input required class="form-control" type="text" name="applicationId"/>
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="dpxImportLabel">Select application</label>
+                                        <select id="mBankChannel" class="form-control" name="channelId">
+                                            <option value="" selected>Select app</option>
+                                            <option value="APP1_MB">APP1_MB</option>
+                                            <option value="APP2_KIOSK">APP2_KIOSK</option>
+                                            <option value="APP3_ATM">APP3_ATM</option>
+                                            <option value="APP4_VBV">APP4_VBV</option>
+                                            <option value="APP5_IBANK">APP5_IBANK</option>
+                                            <option value="APP6_VBV_CR">APP6_VBV_CR</option>
+                                            <option value="APP7_KIOSKCR">APP7_KIOSKCR</option>
+                                            <option value="APP8_FT_SIG">APP8_FT_SIG</option>
+                                        </select>
+                                    </div>
+
+
+                                    <div class="col-md-6">
+                                        <button type="submit" class="btn btn-primary btnStyle" style="margin-top:30px;">
+                                            submit
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                        <hr>
+                        <div>
+                            <form method="post" id="internetBanking">
+                                <div class="row">
+                                    <div class="col-md-12"><h4 style="font-weight: bolder;color:black;">Internet
+                                        Banking (CR Mode)</h4>
+                                        <hr/>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label class="dpxImportLabel">Enter OTP</label>
+                                        <input required class="form-control" type="text" name="otp"/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="dpxImportLabel">Enter challenge</label>
+                                        <input required class="form-control" type="text" name="challenge"/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="dpxImportLabel">Enter centralId</label>
+                                        <input required class="form-control" type="text" name="centralId"/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="dpxImportLabel">Enter applicationId</label>
+                                        <input required class="form-control" type="text" name="applicationId"/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="dpxImportLabel">Select application</label>
+                                        <select required id="iBankChannel" class="form-control" name="channelId">
+                                            <option value="" selected>Select app</option>
+                                            <option value="APP1_MB">APP1_MB</option>
+                                            <option value="APP2_KIOSK">APP2_KIOSK</option>
+                                            <option value="APP3_ATM">APP3_ATM</option>
+                                            <option value="APP4_VBV">APP4_VBV</option>
+                                            <option value="APP5_IBANK">APP5_IBANK</option>
+                                            <option value="APP6_VBV_CR">APP6_VBV_CR</option>
+                                            <option value="APP7_KIOSKCR">APP7_KIOSKCR</option>
+                                            <option value="APP8_FT_SIG">APP8_FT_SIG</option>
+                                        </select>
+                                    </div>
+
+
+                                    <div class="col-md-4">
+                                        <button class="btn btn-primary btnStyle" style="margin-top:32px;">
+                                            submit
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <div>
+                            <form method="post" id="generateChallenge">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        Generate Challenge
+                                        <hr/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="dpxImportLabel">Enter central id</label>
+                                        <input required class="form-control" type="text" name="centralId"/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="dpxImportLabel">Enter application id</label>
+                                        <input required class="form-control" type="text" name="applicationId"/>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="dpxImportLabel">Select application</label>
+                                        <select id="generateChallengeChannel" required class="form-control"
+                                                name="channelId">
+                                            <option value="" selected>Select app</option>
+                                            <option value="APP1_MB">APP1_MB</option>
+                                            <option value="APP2_KIOSK">APP2_KIOSK</option>
+                                            <option value="APP3_ATM">APP3_ATM</option>
+                                            <option value="APP4_VBV">APP4_VBV</option>
+                                            <option value="APP5_IBANK">APP5_IBANK</option>
+                                            <option value="APP6_VBV_CR">APP6_VBV_CR</option>
+                                            <option value="APP7_KIOSKCR">APP7_KIOSKCR</option>
+                                            <option value="APP8_FT_SIG">APP8_FT_SIG</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <hr/>
+                                        <span>
+                                            <button type="submit"
+                                                    class="btn btn-primary btnStyle">submit
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <hr/>
+                        <div>
+                            <div style="width:100%;border-radius:1px;">
+                                <div style="width:100%;border-radius:1px;">
+                                    <h4 style="font-weight: bolder;color:#fff;text-align: center;margin: 0;padding: 10px 0;background: linear-gradient(to right,#046d40,#39af7c);">
+                                        API
+                                        RESPONSE</h4>
+                                </div>
+                                <div>
+                                    <table class="table table-borderd api-table">
+                                        <thead>
+                                        <th>Head</th>
+                                        <th>Message</th>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>Mobile banking</td>
+                                            <td id="mobileMessage"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Internet banking</td>
+                                            <td id="internetMessage"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Challenge</td>
+                                            <td id="challengeMessage"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:replace="common/footer :: footer"></div>
+        <div th:replace="common/footer :: scriptone"></div>
+    </div>
+</div>
+<script>
+    $('#mobileBanking').submit(function (e) {
+        e.preventDefault();
+        let requestData = {
+            "otp": $('#mobileBanking').find('input[name="otp"]').val(),
+            "challenge": null,
+            "channelId": $('#mBankChannel option:selected').val(),
+            "centralId": $('#mobileBanking').find('input[name="centralId"]').val(),
+            "applicationId": $('#mobileBanking').find('input[name="applicationId"]').val(),
+        }
+        let apiDetails = {
+            controllerName: "validateOTP",
+            apiMessageDisplayId: "mobileMessage",
+            loadingMessage: "Validating OTP,please wait..."
+        };
+        makeApiRequest("post", apiDetails, requestData, function (response) {
+
+        })
+    })
+    $('#generateChallenge').submit(function (e) {
+        e.preventDefault();
+
+        let requestData = {
+            "channelId": $('#generateChallengeChannel option:selected').val(),
+            "centralId": $('#generateChallenge').find('input[name="centralId"]').val(),
+            "applicationId": $('#generateChallenge').find('input[name="applicationId"]').val(),
+        }
+        let apiDetails = {
+            controllerName: "generateChallenge",
+            apiMessageDisplayId: "challengeMessage",
+            loadingMessage: "Generating challenge,please wait..."
+        };
+        makeApiRequest("post", apiDetails, requestData, function (response) {
+        })
+    })
+    $('#internetBanking').submit(function (e) {
+        e.preventDefault();
+        let requestData = {
+            "otp": $('#internetBanking').find('input[name="otp"]').val(),
+            "challenge": $('#internetBanking').find('input[name="challenge"]').val(),
+            "channelId": $('#iBankChannel option:selected').val(),
+            "centralId": $('#internetBanking').find('input[name="centralId"]').val(),
+            "applicationId": $('#internetBanking').find('input[name="applicationId"]').val(),
+        }
+        let apiDetails = {
+            controllerName: "validateOTP",
+            apiMessageDisplayId: "internetMessage",
+            loadingMessage: "Validating OTP,please wait..."
+        };
+        makeApiRequest("post", apiDetails, requestData, function (response) {
+        });
+    });
+
+    function showSpinner() {
+        document.getElementById("loadingMessage").innerHTML = "Validating please waith...";
+    }
+</script>
+
+
+</body>
+</html>

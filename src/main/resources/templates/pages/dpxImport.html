@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/header :: common-header"/>
+<body>
+<div class="wrapper">
+    <div th:replace="common/header ::common-sidebar"/>
+    <div class="main-panel">
+        <div th:replace="common/header :: common-navbar"/>
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <h5 style="color:black;font-weight:bold;"><i>Import DPX file</i></h5>
+                        <div class="card card-pad">
+                            <form id="dpxImportForm">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="dpxImportLabel">Select DPX file</label>
+                                        <input id="dpxFile" required class="form-control" type="file" name="dpxFile"/>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label class="dpxImportLabel">Enter transport key</label>
+                                        <input id="InitKey" required class="form-control text-white" type="text" name="InitKey"/>
+                                    </div>
+                                    <br/>
+                                    <div class="col-md-8 mt-2">
+                                        <button type="submit" class="btn btn-primary btnStyle">submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div style="width:35%;">
+                            <div id="dpxImportMessageField"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:replace="common/footer :: footer"></div>
+        <div th:replace="common/footer :: scriptone"></div>
+    </div>
+</div>
+<script>
+
+    $("#dpxImportForm").submit(function (e) {
+        debugger;
+        e.preventDefault();
+
+        let formData = new FormData();
+        let dpxFile = document.querySelector('#dpxFile');
+
+        formData.append("dpxFile", dpxFile.files[0]);
+        formData.append('InitKey',$('#InitKey').val());
+
+        makeApiRequest("post", {
+            controllerName: "dpxImportAPI",
+            apiMessageDisplayId: "dpxImportMessageField",
+            loadingMessage: "Keys import in progress, please wait..."
+        }, formData, function (response) {
+            console.log(response)
+        })
+    })
+
+
+
+</script>
+
+
+</body>
+</html>

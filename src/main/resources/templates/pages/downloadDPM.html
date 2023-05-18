@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/header :: common-header"/>
+<body>
+<div class="wrapper">
+    <div th:replace="common/header ::common-sidebar"/>
+    <div class="main-panel">
+        <div th:replace="common/header :: common-navbar"/>
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <h5 style="color:black;font-weight:bold;"><i>Download Digipass mobile app</i></h5>
+                        <br/>
+                        <button id="androidButton" onclick="downloadApp(1)" class="btn btn-primary" style="margin-top:30px;">
+                            DPM for Android
+                            <i class="material-icons">cloud_download</i>
+                        </button>
+
+                        <button id="iosButton" onclick="downloadApp(2)" class="btn btn-primary disabled"
+                                style="margin-top:30px;cursor:not-allowed;">
+                            DPM for iOS
+                            <i class="material-icons">cloud_download</i>
+                        </button>
+                        <span id="appAndrid" style="color:transparent;" th:text="${androidApp}"></span>
+                        <span id="appIos" style="color:transparent;" th:text="${iosApp}"></span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:replace="common/footer :: footer"></div>
+        <div th:replace="common/footer :: scriptone"></div>
+    </div>
+</div>
+</body>
+<script>
+    function downloadApp(type) {
+        debugger;
+        var urlA=$("#appAndrid").text();
+        var urlI=$("#appIos").text();
+        var urll=type==1?urlA:urlA;
+        var appName=type==1?"android.apk":"android.apk";
+        var item;
+        if(type==1){
+            item=document.getElementById("androidButton");
+        }else{
+            item=document.getElementById("iosButton");
+        }
+
+        item.innerHTML="In progresss, please wait...";
+
+        axios({
+            url:urll,
+            method: 'GET',
+            responseType: 'blob', // important
+        }).then(function(response){
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download',appName);
+        document.body.appendChild(link);
+        link.click();
+
+
+                if(type==1){
+                    item.innerHTML="DPM for Android";
+
+                }else{
+                    item.innerHTML="DPM for iOS";
+
+                }
+    });
+    }
+</script>
+</html>

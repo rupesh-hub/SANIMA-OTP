@@ -1,0 +1,194 @@
+*
+{
+    margin: 0;
+    padding: 0;
+}
+body
+{
+    font-family: 'Source Sans Pro', sans-serif;
+    overflow-x: hidden;
+}
+.content
+{
+    background-color:#eeeeee;
+}
+.left-side
+{
+    height: 100vh;
+    text-align: center;
+    color: white;
+    display: grid;
+}
+.right-side-inner > img
+{
+    margin: 10% auto;
+    display: block;
+    height: 105px;
+}
+.right-side
+{
+    height: 100vh;
+    display: inline-grid;
+    float: unset;
+    margin-left: 50%;
+}
+.right-side-inner
+{
+    height: auto;
+    margin: auto;
+    background: white;
+    padding: 50px;
+    outline: none;
+    border-color: #ffffff;
+    box-shadow: 0 5px 10px #00000026;
+    border-radius: 5px;
+}
+.right-side-inner > p
+{
+    margin-bottom: 20px;
+    font-size: 20px;
+    text-align: center;
+    color: #b3b3b3;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.username
+{
+    margin-bottom: 20px;
+}
+.login-btn
+{
+    height: 33px;
+    background-color: #1e3799;
+    border-radius: 6px;
+    text-align: center;
+    padding: 4px;
+    transition: background-color 0.5s;
+}
+.login-btn > a
+{
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+.login-btn:hover
+{
+    background-color: #1e3799d1;
+    cursor: pointer;
+}
+.text-div
+{
+    margin:35%;
+}
+. btn-container{
+    display: flex;
+}
+.btn-row
+{
+    justify-content: center !important;
+}
+.sctForm_input > label
+{
+    padding-top: calc(.4375rem + 1px) !important;
+    padding-bottom: calc(.4375rem + 1px) !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    text-align: unset !important;
+    max-width: 100%;
+    flex: 100%;
+}
+.mid-content
+{
+    margin: auto;
+}
+.re-pass-label
+{
+    text-align: left !important;
+}
+.style-none{
+    list-style: none !important ;
+}
+.style-none > .other-link > a{
+    background-color: #332e64 !important;
+}
+.style-none > .other-link > a:hover{
+    background-color: #961a1b !important;
+}
+.style-none > .save-link > a{
+    margin-top: 84px;
+}
+.update-row > .col-md-4, .updateBank-row > .col-md-4{
+    margin-top: 15px;
+}
+.hidden{
+    display: none;
+}
+.select-responsive{
+    width: 100%;
+}
+.select-responsive option{
+    padding: .625rem 1.25rem;
+    background-color: #fff;
+}
+.select-arrow-down{
+    position: absolute;
+    z-index: 1;
+    right: 6px;
+    top: 17px;
+    color: #fff;
+    font-size: 17px;
+}
+.logo{
+    padding:0px 0px;
+}
+
+.login-content{
+    background: linear-gradient(to right, #015a2f, #007ec8);
+}
+.col-border{
+    border:1px solid darkgrey;padding:6px;
+    padding-right:15px;
+    padding-left:15px;
+    padding-bottom:15px;
+    border-radius:5px;
+    margin:4px;
+
+}
+.form-control{
+    /*border-top:none;*/
+    /*border-right:none;*/
+    /*border-left:none;*/
+}
+.api-table tr th{
+    font-weight: 600 !important;
+}
+.api-table tr th:first-child{
+    width: 25%;
+}
+.api-table tr th:first-child, .api-table tr td:first-child{
+    border-right: 1px solid #cecece;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice{
+    font-size: 12px;
+}
+.select2-container--default .select2-selection--multiple{
+    border-radius: 5px;
+}
+.select2-container--default.select2-container--focus .select2-selection--multiple, .select2-container--default .select2-selection--multiple{
+    border-color: #bdbcbc;
+}
+.small-icons-dashboard{
+
+}
+.card-height-small-dashboard{
+    height:50px;
+}
+
+@media (max-width: 768px) {
+    .right-side{
+        margin-left: 0;
+        padding-left:0;
+        width: 100%;
+    }
+}

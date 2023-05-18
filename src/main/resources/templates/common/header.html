@@ -1,0 +1,603 @@
+
+
+<!DOCTYPE html>
+<html
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="common-header">
+
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+    <title> Sanima Bank - OTP Managment </title>
+
+    <link th:href="@{/css/bootstrap-colorpicker.css}" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/fonts.googleapis.com.css}"/>
+    <link rel="stylesheet" th:href="@{/css/jquery.dataTables.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/mdb.min.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/js/plugins/select2/select2.min.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/css/material-dashboard.min790f.css?v=2.0.1}">
+    <link rel="stylesheet" th:href="@{/assets/css/custom.css}">
+    <link rel="stylesheet" th:href="@{/css/otp.css}">
+    <link rel="stylesheet" th:href="@{/css/select2.min.css}">
+
+    <!-- iframe removal -->
+    <script type="text/javascript">
+        if (document.readyState === 'complete') {
+            if (window.location != window.parent.location) {
+                const elements = document.getElementsByClassName("iframe-extern");
+                while (elemnts.lenght > 0) elements[0].remove();
+            }
+        }
+        ;
+
+        function minmaxSidebar() {
+            var elm = document.getElementsByTagName("body")[0];
+            console.log(elm);
+            if (elm.classList.contains("sidebar-mini")) {
+                elm.setAttribute("class", "");
+            } else {
+                elm.setAttribute("class", "sidebar-mini");
+            }
+
+        }
+    </script>
+
+    <style>
+        select,
+        input[type='text'],
+        input[type='email'],
+        input[type='password'],
+        input[type='number'],
+        input[type='tel']{
+            border-radius: 3px;
+            padding: 3px;
+            width:100% !important;
+            background-color: #f8f5f5;
+
+        }
+        table thead {
+            background-color: #f1eeee;
+            color: #000;
+        }
+
+
+
+    </style>
+</head>
+
+<body class="sidebar-mini">
+<div class="wrapper">
+    <div th:fragment="common-sidebar" class="sidebar" data-color="rose" data-background-color="black"
+         data-image="../assets/img/sidebar-1.jpg">
+
+        <div class="logo" style="background: #fff; color:#000;height:75px;padding:0px 0px;">
+            <a th:href="@{/admin}" class="simple-text logo-mini">
+                S
+            </a>
+
+            <a th:href="@{/admin}" class="simple-text logo-normal">
+                <img style="width: 50%;margin-top: 6px;" th:src="@{/images/sanima-bank.jpg}">
+            </a>
+
+        </div>
+
+        <div class="sidebar-wrapper">
+            <div class="user">
+                <div class="photo" data-toggle="collapse">
+                    <img th:src="@{/assets/img/faces/avatar.png}"/>
+                </div>
+                <div class="user-info">
+                    <a class="nav-link" th:href="@{/logout}">
+
+                        <span class="sidebar-normal"> Log Out </span>
+                    </a>
+                </div>
+            </div>
+            <ul class="nav">
+
+                <li class="nav-item active">
+                    <a class="nav-link" th:href="@{/admin}">
+                        <i class="material-icons">dashboard</i>
+                        <p> Dashboard </p>
+                    </a>
+                </li>
+                <li class="nav-item" sec:authorize="hasPermission('DI','')">
+                    <a class="nav-link" th:href="@{/admin/dpxImport_}">
+                        <i class="material-icons">import_export</i>
+                        <p>DPX import</p>
+                    </a>
+                </li>
+                <li class="nav-item " sec:authorize="hasPermission('U#R#BM','')">
+                    <a class="nav-link" data-toggle="collapse" href="#pagesExamples">
+                        <i class="material-icons">people</i>
+                        <p> User Management
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+
+                    <div class="collapse" id="pagesExamples" style="margin-left: 20px;">
+                        <ul class="nav">
+                            <li class="nav-item " sec:authorize="hasPermission('R','')">
+                                <a class="nav-link" th:href="@{/role_}">
+                                    <span class="sidebar-mini"><i class="material-icons">accessible</i></span>
+                                    <span class="sidebar-normal"> Role </span>
+                                </a>
+                            </li>
+                            <li class="nav-item " sec:authorize="hasPermission('U','')">
+                                <a class="nav-link" th:href="@{/user_}">
+                                    <span class="sidebar-mini"> <i class="material-icons">group</i> </span>
+                                    <span class="sidebar-normal"> User </span>
+                                </a>
+                            </li>
+
+                            <!--BRANCH-->
+                            <li class="nav-item " sec:authorize="hasPermission('BM','')">
+                                <a class="nav-link" th:href="@{/branch_}">
+                                    <span class="sidebar-mini"> <i class="material-icons">dataset</i> </span>
+                                    <span class="sidebar-normal"> Branch </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!--module-management-tab-->
+                <li class="nav-item " sec:authorize="hasPermission('MM#RMS','')">
+                    <a class="nav-link" data-toggle="collapse" href="#moduleMgmt">
+                        <i class="material-icons">account_balance_wallet</i>
+                        <p> Module Management
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+
+                    <div class="collapse" id="moduleMgmt">
+                        <ul class="nav" style="margin-left: 20px;">
+                            <li class="nav-item " sec:authorize="hasPermission('MM','')">
+                                <a class="nav-link" th:href="@{/admin/module_/}">
+                                    <i class="material-icons">grading</i>
+                                    <p>Module Setup</p>
+                                </a>
+                            </li>
+                            <li class="nav-item" sec:authorize="hasPermission('RMS','')">
+                                <a class="nav-link" th:href="@{/admin/roleModule_/}">
+                                    <i class="material-icons">grading</i>
+                                    <p>Role-Module Setup</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <!--module-management-tab ends-->
+
+
+                <!--otp-tab starts-->
+                <li class="nav-item" sec:authorize="hasPermission('GDK#DD#DR#DA#AD#OV','')">
+                    <a class="nav-link" data-toggle="collapse" href="#pagesExamples2">
+                        <i class="material-icons">account_balance_wallet</i>
+                        <p>OTP
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+
+                    <div class="collapse" id="pagesExamples2" style="margin-left: 20px;">
+                        <ul class="nav">
+
+                            <li class="nav-item" sec:authorize="hasPermission('DR','')">
+                                <a class="nav-link" th:href="@{/digipassRequest_}">
+                                    <i class="material-icons">fiber_new</i>
+                                    <p>Digipass request</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item" sec:authorize="hasPermission('DA','')">
+                                <a class="nav-link" th:href="@{/digipassApprove_}">
+                                    <i class="material-icons">fiber_new</i>
+                                    <p>Digipass approve</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item" sec:authorize="hasPermission('GDK','')">
+                                <a class="nav-link" th:href="@{/generateActivationCode_}">
+                                    <i class="material-icons">fiber_new</i>
+                                    <p>Get Digipass Key</p>
+                                </a>
+                            </li>
+                            <li class="nav-item" sec:authorize="hasPermission('AD','')">
+                                <a class="nav-link" th:href="@{/activateDigipass_}">
+                                    <i class="material-icons">local_activity</i>
+                                    <p>Activate Digipass</p>
+                                </a>
+                            </li>
+                            <li class="nav-item" sec:authorize="hasPermission('OV','')">
+                                <a class="nav-link" th:href="@{/validateOTP_}">
+                                    <i class="material-icons">done</i>
+                                    <p>OTP Validation</p>
+                                </a>
+                            </li>
+                            <li class="nav-item" sec:authorize="hasPermission('DD','')">
+                                <a class="nav-link" th:href="@{/deactivateDigipass_}">
+                                    <i class="material-icons">highlight_off</i>
+                                    <p>Deactivate Digipass</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/listDigipass_}">
+                        <i class="material-icons">list</i>
+                        <p>List Digipass</p>
+                    </a>
+                </li>
+
+                <!--log reports-->
+                <li class="nav-item " sec:authorize="hasPermission('AL#UL','')">
+                    <a class="nav-link" data-toggle="collapse" href="#logMgmt">
+                        <i class="material-icons">account_balance_wallet</i>
+                        <p> Log Reports
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+
+                    <div class="collapse" id="logMgmt">
+                        <ul class="nav" style="margin-left: 20px;">
+                            <li class="nav-item " sec:authorize="hasPermission('UL','')">
+                                <a class="nav-link" th:href="@{/userLog_}" >
+                                    <i class="material-icons">grading</i>
+                                    <p>User Log</p>
+                                </a>
+                            </li>
+                            <li class="nav-item " sec:authorize="hasPermission('AL','')">
+                                <a class="nav-link" th:href="@{/activityLog_}">
+                                    <i class="material-icons">fiber_new</i>
+                                    <p>Activity log</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/downloadDPM_}">
+                        <i class="material-icons">phone_android</i>
+                        <p>Download DPM</p>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="main-panel">
+        <!-- Navbar -->
+        <nav th:fragment="common-navbar" class="navbar navbar-expand-lg navbar-transparent  navbar-absolute fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-wrapper">
+                    <div class="navbar-minimize">
+                        <button onclick="minmaxSidebar()" id="minimizeSidebar"
+                                class="btn btn-just-icon btn-white btn-fab btn-round">
+                            <i class="material-icons text_align-center visible-on-sidebar-regular">more_vert</i>
+                            <i class="material-icons design_bullet-list-67 visible-on-sidebar-mini">view_list</i>
+                        </button>
+                    </div>
+                    <a class="navbar-brand" href="#pablo">OTP management system</a>
+                </div>
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+                        aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="navbar-toggler-icon icon-bar"></span>
+                    <span class="navbar-toggler-icon icon-bar"></span>
+                    <span class="navbar-toggler-icon icon-bar"></span>
+                </button>
+
+                <div class="collapse navbar-collapse justify-content-end">
+
+
+                    <div class="text-center">
+                        Welcome <span th:text="${user}"></span>
+                    </div>
+
+
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin}">
+                                <i class="material-icons">dashboard</i>
+                                <p>
+                                    <span class="d-lg-none d-md-block">Stats</span>
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#pablo">
+                                <p>
+                                    <span class="d-lg-none d-md-block">Account</span>
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- End Navbar -->
+
+        <div class="content">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card card-chart">
+                            <div class="card-header card-header-rose" data-header-animation="true">
+                                <div class="ct-chart" id="websiteViewsChart"></div>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-actions">
+                                    <button type="button" class="btn btn-danger btn-link fix-broken-card">
+                                        <i class="material-icons">build</i> Fix Header!
+                                    </button>
+                                    <button type="button" class="btn btn-info btn-link" rel="tooltip"
+                                            data-placement="bottom" title="Refresh">
+                                        <i class="material-icons">refresh</i>
+                                    </button>
+                                    <button type="button" class="btn btn-default btn-link" rel="tooltip"
+                                            data-placement="bottom" title="Change Date">
+                                        <i class="material-icons">edit</i>
+                                    </button>
+                                </div>
+                                <h4 class="card-title">Website Views</h4>
+                                <p class="card-category">Last Campaign Performance</p>
+                            </div>
+                            <div class="card-footer">
+                                <div class="stats">
+                                    <i class="material-icons">access_time</i> campaign sent 2 days ago
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card card-chart">
+                            <div class="card-header card-header-success" data-header-animation="true">
+                                <div class="ct-chart" id="dailySalesChart"></div>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-actions">
+                                    <button type="button" class="btn btn-danger btn-link fix-broken-card">
+                                        <i class="material-icons">build</i> Fix Header!
+                                    </button>
+                                    <button type="button" class="btn btn-info btn-link" rel="tooltip"
+                                            data-placement="bottom" title="Refresh">
+                                        <i class="material-icons">refresh</i>
+                                    </button>
+                                    <button type="button" class="btn btn-default btn-link" rel="tooltip"
+                                            data-placement="bottom" title="Change Date">
+                                        <i class="material-icons">edit</i>
+                                    </button>
+                                </div>
+                                <h4 class="card-title">Daily Sales</h4>
+                                <p class="card-category">
+                                    <span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> increase
+                                    in today sales.</p>
+                            </div>
+                            <div class="card-footer">
+                                <div class="stats">
+                                    <i class="material-icons">access_time</i> updated 4 minutes ago
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card card-chart">
+                            <div class="card-header card-header-info" data-header-animation="true">
+                                <div class="ct-chart" id="completedTasksChart"></div>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-actions">
+                                    <button type="button" class="btn btn-danger btn-link fix-broken-card">
+                                        <i class="material-icons">build</i> Fix Header!
+                                    </button>
+                                    <button type="button" class="btn btn-info btn-link" rel="tooltip"
+                                            data-placement="bottom" title="Refresh">
+                                        <i class="material-icons">refresh</i>
+                                    </button>
+                                    <button type="button" class="btn btn-default btn-link" rel="tooltip"
+                                            data-placement="bottom" title="Change Date">
+                                        <i class="material-icons">edit</i>
+                                    </button>
+                                </div>
+                                <h4 class="card-title">Completed Tasks</h4>
+                                <p class="card-category">Last Campaign Performance</p>
+                            </div>
+                            <div class="card-footer">
+                                <div class="stats">
+                                    <i class="material-icons">access_time</i> campaign sent 2 days ago
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-stats">
+                            <div class="card-header card-header-warning card-header-icon">
+                                <div class="card-icon">
+                                    <i class="material-icons">weekend</i>
+                                </div>
+                                <p class="card-category">Bookings</p>
+                                <h3 class="card-title">184</h3>
+                            </div>
+                            <div class="card-footer">
+                                <div class="stats">
+                                    <i class="material-icons text-danger">warning</i>
+                                    <a href="#pablo">Get More Space...</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-stats">
+                            <div class="card-header card-header-rose card-header-icon">
+                                <div class="card-icon">
+                                    <i class="material-icons">equalizer</i>
+                                </div>
+                                <p class="card-category">Website Visits</p>
+                                <h3 class="card-title">75.521</h3>
+                            </div>
+                            <div class="card-footer">
+                                <div class="stats">
+                                    <i class="material-icons">local_offer</i> Tracked from Google Analytics
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-stats">
+                            <div class="card-header card-header-success card-header-icon">
+                                <div class="card-icon">
+                                    <i class="material-icons">store</i>
+                                </div>
+                                <p class="card-category">Revenue</p>
+                                <h3 class="card-title">$34,245</h3>
+                            </div>
+                            <div class="card-footer">
+                                <div class="stats">
+                                    <i class="material-icons">date_range</i> Last 24 Hours
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-stats">
+                            <div class="card-header card-header-info card-header-icon">
+                                <div class="card-icon">
+                                    <i class="fa fa-twitter"></i>
+                                </div>
+                                <p class="card-category">Followers</p>
+                                <h3 class="card-title">+245</h3>
+                            </div>
+                            <div class="card-footer">
+                                <div class="stats">
+                                    <i class="material-icons">update</i> Just Updated
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="fixed-plugin">
+    <div class="dropdown show-dropdown">
+        <a href="#" data-toggle="dropdown">
+            <i class="fa fa-cog fa-2x"> </i>
+        </a>
+
+        <ul class="dropdown-menu">
+            <li class="header-title"> Sidebar Filters</li>
+            <li class="adjustments-line">
+                <a href="javascript:void(0)" class="switch-trigger active-color">
+                    <div class="ml-auto mr-auto">
+                        <span class="badge filter badge-purple" data-color="purple"></span>
+                        <span class="badge filter badge-azure" data-color="azure"></span>
+                        <span class="badge filter badge-green" data-color="green"></span>
+                        <span class="badge filter badge-orange" data-color="orange"></span>
+                        <span class="badge filter badge-danger" data-color="danger"></span>
+                        <span class="badge filter badge-rose active" data-color="rose"></span>
+                    </div>
+                    <div class="clearfix"></div>
+                </a>
+            </li>
+
+            <li class="header-title">Sidebar Background</li>
+            <li class="adjustments-line">
+                <a href="javascript:void(0)" class="switch-trigger background-color">
+                    <div class="ml-auto mr-auto">
+                        <span class="badge filter badge-white" data-color="white"></span>
+                        <span class="badge filter badge-black active" data-color="black"></span>
+                    </div>
+                    <div class="clearfix"></div>
+                </a>
+            </li>
+
+            <li class="adjustments-line">
+                <a href="javascript:void(0)" class="switch-trigger">
+                    <p>Sidebar Mini</p>
+                    <label class="ml-auto">
+                        <div class="togglebutton switch-sidebar-mini">
+                            <label>
+                                <input type="checkbox">
+                                <span class="toggle"></span>
+                            </label>
+                        </div>
+                    </label>
+                    <div class="clearfix"></div>
+                </a>
+            </li>
+
+            <li class="adjustments-line">
+                <a href="javascript:void(0)" class="switch-trigger">
+                    <p>Sidebar Images</p>
+                    <label class="switch-mini ml-auto">
+                        <div class="togglebutton switch-sidebar-image">
+                            <label>
+                                <input type="checkbox" checked="">
+                                <span class="toggle"></span>
+                            </label>
+                        </div>
+                    </label>
+                    <div class="clearfix"></div>
+                </a>
+            </li>
+
+            <li class="header-title">Images</li>
+
+            <li class="active">
+                <a class="img-holder switch-trigger" href="javascript:void(0)">
+                    <img th:src="@{/assets/img/sidebar-1.jpg}" alt=""/>
+                </a>
+            </li>
+            <li>
+                <a class="img-holder switch-trigger" href="javascript:void(0)">
+                    <img th:src="@{/assets/img/sidebar-2.jpg}" alt=""/>
+                </a>
+            </li>
+            <li>
+                <a class="img-holder switch-trigger" href="javascript:void(0)">
+                    <img th:src="@{/assets/img/sidebar-3.jpg}" alt=""/>
+                </a>
+            </li>
+            <li>
+                <a class="img-holder switch-trigger" href="javascript:void(0)">
+                    <img th:src="@{/assets/img/sidebar-4.jpg}" alt=""/>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+</body>
+
+<!--   Core JS Files   -->
+<script th:src="@{/assets/js/core/jquery.min.js}"></script>
+<script th:src="@{/assets/js/bootstrap-material-design.min.js}"></script>
+<script th:src="@{/assets/js/material-dashboard790f.js?v=2.0.1}"></script>
+<script th:src="@{/assets/js/plugins/demo.js}"></script>
+<script th:src="@{/assets/js/custom.js}"></script>
+<noscript><img height="1" width="1" style="display:none"
+               src="https://www.facebook.com/tr?id=111649226022273&amp;ev=PageView&amp;noscript=1"
+/></noscript>
+</html>

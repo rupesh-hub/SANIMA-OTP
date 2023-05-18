@@ -1,0 +1,70 @@
+server:
+  port: 9091
+#applicationUrl is used to send qr code image link to frontend on api response / download link for dpm mobile app
+applicationUrl: http://localhost:9091
+#applicationUrl=http://192.168.40.223:8081
+#applicationUrl=http://110.44.113.51:8085/sanimaotp
+#applicationUrl=http://192.168.1.4:8080/sanimaotp
+
+#This is file path where QR code has to be placed before you do DPX import. QR code image stored in this file path is used during  api call
+qrCodeFolder: E:\psc\SANIMA BANK\qrCodes\
+#qrCodeFolder=E:/sanimaotp/apache-tomcat-8.5.34/webapps/sanimaotp/WEB-INF/classes/static/qrCodes/
+#qrCodeFolder=C:/apache-tomcat-8.5.9/webapps/sanimaotp/WEB-INF/classes/static/qrCodes/
+
+#spring.thymeleaf.cache=false
+#spring.datasource.url=jdbc:postgresql://localhost:5432/vasco_otp
+#spring.datasource.username=postgres
+#spring.datasource.password=postgres
+#spring.datasource.driver-class-name=org.postgresql.Driver
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/vasco_otp
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      default_schema: public
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL94Dialect
+        temp:
+          use_jdbc_metadata_defaults: false
+    generate-ddl: true
+    show-sql: false
+  application:
+    name: sanimaotp
+  #to allow unlimited file size
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
+
+#c6fee40ea16c2b88280d74b8f9fccedd
+
+
+#spring.datasource.url=jdbc:postgresql://110.44.113.51:5432/vasco_otp
+#spring.datasource.username=postgres
+#spring.datasource.password=postgres
+#spring.datasource.driver-class-name=org.postgresql.Driver
+
+#spring.datasource.url=jdbc:postgresql://192.168.1.4:5432/vasco_otp
+#spring.datasource.username=postgres
+#spring.datasource.password=postgres1123
+#spring.datasource.driver-class-name=org.postgresql.Driver
+
+
+dpmLocationAndroid: mobileApps/DIGIPASS.apk
+dpmLocationIos: mobileApps/test2.apk
+
+
+
+
+
+
+
+
+
+
+
+

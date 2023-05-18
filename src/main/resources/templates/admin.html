@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/header :: common-header"/>
+
+
+<body id="mainBody" class="">
+<div class="wrapper">
+    <div th:replace="common/header :: common-sidebar"/>
+
+    <div class="main-panel">
+        <!-- Navbar -->
+        <div th:replace="common/header :: common-navbar"/>
+        <!-- End Navbar -->
+
+        <div class="content">
+            <div class="container-fluid">
+
+                <!--LOGIC: show modal if - requiredPasswordChange is true -->
+
+                <div class="modal fade"
+                     id="passwordChangeModal"
+                     tabindex="-1"
+                     role="dialog"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title text-light bg-info p-3 rounded">Password Change</h5>
+                            </div>
+                            <div class="modal-body">
+                                <div class="col-md-12" name="password-change-div-1">
+                                    <label class="dpxImportLabel" for="password">Password</label>
+                                    <input required class="form-control" type="password" id="password" autofocus="true"
+                                           autocomplete="off"/>
+                                </div>
+                                <div class="col-md-12" name="password-change-div-2">
+                                    <label class="dpxImportLabel" for="confirmPassword">Confirm Password</label>
+                                    <input required class="form-control" type="password" id="confirmPassword"
+                                           autofocus="true" autocomplete="off"/>
+                                    <h6 class="text-danger" id="errMessage" style="font-size: 12px"></h6>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-outline-primary btn-sm" onclick="confirmChangePassword()">Change
+                                    Password
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <span style="float:right;cursor:pointer;">
+                            <div onclick="refreshDashboardData()"><i class="material-icons">refresh</i></div>
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-stats">
+                            <div class="card-header card-header-info card-header-icon card-height-small-dashboard ">
+                                <div class="card-icon">
+                                    <i class="material-icons">store</i>
+                                </div>
+                                <p class="card-category">Total keys</p>
+                                <h3 class="card-title" id="totalKeysDiv">-</h3>
+                            </div>
+                            <div class="card-footer">
+                                <div class="stats" style="color:transparent;">
+                                    .
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-stats">
+                            <div class="card-header card-header-success card-header-icon card-height-small-dashboard ">
+                                <div class="card-icon">
+                                    <i class="material-icons">folder_open</i>
+                                </div>
+                                <p class="card-category">Remaining keys</p>
+                                <h3 class="card-title" id="remainingKeysDiv">-</h3>
+                            </div>
+                            <div class="card-footer">
+                                <div class="stats">
+                                    .
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-stats">
+                            <div class="card-header card-header-warning card-header-icon card-height-small-dashboard ">
+                                <div class="card-icon">
+                                    <i class="material-icons">folder</i>
+                                </div>
+                                <p class="card-category">Reserved keys</p>
+                                <h3 class="card-title" id="providedKeysDiv">-</h3>
+                            </div>
+                            <div class="card-footer">
+                                <div class="stats">
+                                    .
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-stats">
+                            <div class="card-header card-header-rose card-header-icon card-height-small-dashboard ">
+                                <div class="card-icon">
+                                    <i class="material-icons">folder_shared</i>
+                                </div>
+                                <p class="card-category">Activated keys</p>
+                                <h3 class="card-title" id="activatedKeysDiv">-</h3>
+                            </div>
+                            <div class="card-footer">
+                                <div class="stats">
+                                    .
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-stats">
+                            <div class="card-header card-header-primary card-header-icon card-height-small-dashboard">
+                                <div class="card-icon">
+                                    <i class="material-icons small-icons-dashboard">smartphone</i>
+                                </div>
+                                <p class="card-category">Mobile banking</p>
+                                <h3 class="card-title" id="app1CountDiv">-</h3>
+                            </div>
+                            <div class="card-footer">
+                                <div class="stats">
+                                    Activated Users
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-stats">
+                            <div class="card-header card-header-primary card-header-icon card-height-small-dashboard ">
+                                <div class="card-icon">
+                                    <i class="material-icons small-icons-dashboard">computer</i>
+                                </div>
+                                <p class="card-category">Internet Banking</p>
+                                <h3 class="card-title" id="app5CountDiv">-</h3>
+                            </div>
+                            <div class="card-footer">
+                                <div class="stats">
+                                    Activated Users
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-stats">
+                            <div class="card-header card-header-primary card-header-icon card-height-small-dashboard ">
+                                <div class="card-icon">
+                                    <i class="material-icons small-icons-dashboard">atm</i>
+                                </div>
+                                <p class="card-category">ATM</p>
+                                <h3 class="card-title" id="app3CountDiv">-</h3>
+                            </div>
+                            <div class="card-footer">
+                                <div class="stats">
+                                    Activated Users
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-stats">
+                            <div class="card-header card-header-primary card-header-icon card-height-small-dashboard ">
+                                <div class="card-icon">
+                                    <i class="material-icons small-icons-dashboard">credit_card</i>
+                                </div>
+                                <p class="card-category">VBV</p>
+                                <h3 class="card-title" id="app4CountDiv">-</h3>
+                            </div>
+                            <div class="card-footer">
+                                <div class="stats">
+                                    Activated Users
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-stats">
+                            <div class="card-header card-header-primary card-header-icon card-height-small-dashboard "
+                                 style="height:45px;">
+                                <div class="card-icon">
+                                    <i class="material-icons small-icons-dashboard">local_atm</i>
+                                </div>
+                                <p class="card-category">Kiosk</p>
+                                <h3 class="card-title" id="app2CountDiv">-</h3>
+                            </div>
+                            <div class="card-footer">
+                                <div class="stats">
+                                    Activated Users
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-stats">
+                            <div class="card-header card-header-primary card-header-icon card-height-small-dashboard "
+                                 style="height:45px;">
+                                <div class="card-icon">
+                                    <i class="material-icons small-icons-dashboard">card_travel</i>
+                                </div>
+                                <p class="card-category">VBV_CR</p>
+                                <h3 class="card-title" id="app6CountDiv">-</h3>
+                            </div>
+                            <div class="card-footer">
+                                <div class="stats">
+                                    Activated Users
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-stats">
+                            <div class="card-header card-header-primary card-header-icon card-height-small-dashboard "
+                                 style="height:45px;">
+                                <div class="card-icon">
+                                    <i class="material-icons small-icons-dashboard">check_box_outline_blank</i>
+                                </div>
+                                <p class="card-category">KIOSK_CR</p>
+                                <h3 class="card-title" id="app7CountDiv">-</h3>
+                            </div>
+                            <div class="card-footer">
+                                <div class="stats">
+                                    Activated Users
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="card card-stats">
+                            <div class="card-header card-header-primary card-header-icon" style="height:45px;">
+                                <div class="card-icon">
+                                    <i class="material-icons small-icons-dashboard">bar_chart</i>
+                                </div>
+                                <p class="card-category">Signature</p>
+                                <h3 class="card-title" id="app8CountDiv">-</h3>
+                            </div>
+                            <div class="card-footer">
+                                <div class="stats">
+                                    Activated Users
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <span id="dasboardDataStatusMessage" style="color:transparent !important;"></span>
+
+
+        </div>
+
+
+        <div th:replace="common/footer :: footer"></div>
+
+    </div>
+</div>
+
+<div th:replace="common/footer :: scriptone"></div>
+</body>
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+        $.ajax({
+            type: "GET",
+            url: RELATIVE_URL_INIT + `change-pass-req`,
+            success: (res) => {
+                if (res) {
+                    $('#passwordChangeModal').modal({backdrop: 'static', keyboard: false, show: true})
+                }
+            },
+            error: err => {
+                console.log('err ', err.message);
+            }
+        });
+
+//init wizard
+
+        demo.initMaterialWizard();
+
+// Javascript method's body can be found in assets/js/demos.js
+        demo.initDashboardPageCharts();
+
+        demo.initCharts();
+
+    });
+
+</script>
+
+
+<script>
+    var cDate = +new Date();
+    try {
+        var pDate = localStorage.getItem("timestamp");
+        if (cDate - pDate > 30000) {
+            getDashboardData();
+        } else {
+            plotData();
+            console.log("No need to fetch data")
+        }
+    } catch (e) {
+        console.log("error has occured")
+        getDashboardData();
+    }
+
+
+    function getDashboardData() {
+
+        makeApiRequest("post", {
+            hideMessageField: true,
+            controllerName: "getStats",
+            apiMessageDisplayId: "dasboardDataStatusMessage",
+            loadingMessage: "Loading dashboard data.."
+        }, "", function (response) {
+            console.log("dashboard response")
+            var data = response.data.data;
+
+            localStorage.setItem("dData", btoa(JSON.stringify(data)));
+            localStorage.setItem("timestamp", +new Date());
+            plotData();
+
+        });
+    }
+
+    function refreshDashboardData() {
+        $("#remainingKeysDiv").html("...");
+        $("#providedKeysDiv").html("...");
+        $("#activatedKeysDiv").html("...");
+        $("#totalKeysDiv").html("...");
+        $("#app1CountDiv").html("...");
+        $("#app2CountDiv").html("...");
+        $("#app3CountDiv").html("...");
+        $("#app4CountDiv").html("...");
+        $("#app5CountDiv").html("...");
+        $("#app6CountDiv").html("...");
+        $("#app7CountDiv").html("...");
+        getDashboardData();
+    }
+
+    function plotData() {
+        var data = JSON.parse(atob(localStorage.getItem("dData")));
+        $("#remainingKeysDiv").html(data.New);
+        $("#providedKeysDiv").html(data.Provided);
+        $("#activatedKeysDiv").html(data.Active);
+        $("#totalKeysDiv").html(data.Total);
+        $("#app1CountDiv").html(data.ActiveMobile);
+        $("#app2CountDiv").html(data.ActivKiosk);
+        $("#app3CountDiv").html(data.ActiveATM);
+        $("#app4CountDiv").html(data.ActiveVBV);
+        $("#app5CountDiv").html(data.ActiveInternetBanking);
+        $("#app6CountDiv").html(data.ActiveVBV_CR);
+        $("#app7CountDiv").html(data.ActiveKIOSK_CR);
+    }
+
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        demo.initVectorMap();
+    });
+</script>
+
+
+<script src="../assets/assets-for-demo/js/jquery.sharrre.js">
+
+</script>
+
+<script>
+
+    $(document).ready(function () {
+        $('#twitter').sharrre({
+            share: {
+                twitter: true
+            },
+            enableHover: false,
+            enableTracking: false,
+            enableCounter: false,
+            buttons: {twitter: {via: 'CreativeTim'}},
+            click: function (api, options) {
+                api.simulateClick();
+                api.openPopup('twitter');
+            },
+            template: '<i class="fa fa-twitter"></i> Twitter',
+            url: 'http://demos.creative-tim.com/material-kit-pro/presentation.html'
+        });
+
+        $('#facebook').sharrre({
+            share: {
+                facebook: true
+            },
+            enableHover: false,
+            enableTracking: false,
+            enableCounter: false,
+            click: function (api, options) {
+                api.simulateClick();
+                api.openPopup('facebook');
+            },
+            template: '<i class="fa fa-facebook-square"></i> Facebook',
+            url: 'http://demos.creative-tim.com/material-kit-pro/presentation.html'
+        });
+
+        $('#google').sharrre({
+            share: {
+                googlePlus: true
+            },
+            enableCounter: false,
+            enableHover: false,
+            enableTracking: true,
+            click: function (api, options) {
+                api.simulateClick();
+                api.openPopup('googlePlus');
+            },
+            template: '<i class="fa fa-google-plus"></i> Google',
+            url: 'http://demos.creative-tim.com/material-kit-pro/presentation.html'
+        });
+    });
+
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-46172202-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function () {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+
+    // Facebook Pixel Code Don't Delete
+    !function (f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function () {
+            n.callMethod ?
+                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = !0;
+        n.version = '2.0';
+        n.queue = [];
+        t = b.createElement(e);
+        t.async = !0;
+        t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s)
+    }(window,
+        document, 'script', '../../../connect.facebook.net/en_US/fbevents.js');
+
+    try {
+        fbq('init', '111649226022273');
+        fbq('track', "PageView");
+
+    } catch (err) {
+        console.log('Facebook Track Error:', err);
+    }
+
+
+    /*CHANGE PASSWORD*/
+    function confirmChangePassword() {
+        const URL = RELATIVE_URL_INIT + `user_/changePassword_`;
+        let requestData = {
+            "password": $('#password').val(),
+            "confirmPassword": $('#confirmPassword').val()
+        }
+        $.ajax({
+            url: URL,
+            type: 'post',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify(requestData),
+            success: function (data) {
+                if (data == true) {
+                    $("#passwordChangeModal").modal('hide')
+                } else {
+                    document.querySelector("#errMessage").innerHTML = "<span>*password and confirm password does not matched.</span>";
+                    $('#passwordChangeModal').modal({backdrop: 'static', keyboard: false, show: true})
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log("Error is " + errorThrown);
+                $('#passwordChangeModal').modal({backdrop: 'static', keyboard: false, show: true})
+            }
+        });
+    }
+</script>
+
+<noscript><img height="1" width="1" style="display:none"
+               src="https://www.facebook.com/tr?id=111649226022273&amp;ev=PageView&amp;noscript=1"
+/></noscript>
+
+
+</html>

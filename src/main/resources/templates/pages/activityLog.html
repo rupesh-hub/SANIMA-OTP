@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/header :: common-header"/>
+
+<body>
+<div class="wrapper">
+    <div th:replace="common/header ::common-sidebar"/>
+    <div class="main-panel">
+        <div th:replace="common/header :: common-navbar"/>
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+
+
+                        <!--table ui-->
+                        <div class="card card-pad">
+                            <h5 style="color:black;font-weight:bold;"><i>Activity management log</i></h5>
+
+                            <!--export excel-->
+                            <div class="w-100">
+                                <a class="btn btn-sm btn-primary" style="float: right" th:href="@{/activityLog_/export-excel}">
+                                    <i class="material-icons">file_download</i> export
+                                </a>
+                            </div>
+                            <!--export excel-->
+                            <div class="table-responsive">
+                                <table id="exampleTable" class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>S.N.</th>
+                                        <th>Central Id</th>
+                                        <th>Channel Id</th>
+                                        <th>App Id</th>
+                                        <th>Task By</th>
+                                        <th>Activity Desc</th>
+                                        <th>Log Type</th>
+                                        <th>Information</th>
+                                        <th>R Date</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="aLog, i : ${activityLogs}" >
+                                        <td th:text="${i.count}"></td>
+                                        <td th:text="${aLog.centralId}"></td>
+                                        <td th:text="${aLog.channelId}"></td>
+                                        <td th:text="${aLog.applicationId}"></td>
+                                        <td th:text="${aLog.applicationId}"></td>
+                                        <td th:text="${aLog.taskBy}"></td>
+                                        <td th:text="${aLog.logType}"></td>
+                                        <td th:text="${aLog.extraInfo1}"></td>
+                                        <td th:text="${#dates.format(new java.util.Date(aLog.rDate), 'dd-MMM-yy')}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!--table ui-->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:replace="common/footer :: footer"></div>
+        <div th:replace="common/footer :: scriptone"></div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script>
+        $('#exampleTable').DataTable();
+</script>
+</body>
+</html>

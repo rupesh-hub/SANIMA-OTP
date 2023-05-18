@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/header :: common-header"/>
+<body>
+<div class="wrapper">
+    <div th:replace="common/header ::common-sidebar"/>
+    <div class="main-panel">
+        <div th:replace="common/header :: common-navbar"/>
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-7 col-md-7 col-sm-6">
+                        <h5 style="color:black;font-weight:bold;"><i>Generate Activation Code</i></h5>
+                        <div>
+                            <div class="card card-pad">
+
+                                <div class="table-responsive">
+                                    <table id="exampleTable" class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>S.N.</th>
+                                            <th>Application Type</th>
+                                            <th>Application Id</th>
+                                            <th>Customer Id</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody th:if="${digipassReqList.size() > 0}">
+                                        <tr th:each="digipassReq, i:${digipassReqList}">
+
+                                            <td th:text="${i.count}"></td>
+                                            <td th:text="${digipassReq.applicationType}"></td>
+                                            <td th:text="${digipassReq.applicationId}"></td>
+                                            <td th:text="${digipassReq.centralId}"></td>
+                                            <td>
+                                                <button class="btn-sm btn btn-outline-success text-success"
+                                                        th:text="${'generate'}"
+                                                        th:onclick="getActivationCode([[${digipassReq.centralId}]],[[${digipassReq.applicationId}]],[[${digipassReq.applicationType}]])">
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <div class="inputs-hidden">
+                                                    <input type="hidden" th:value="${digipassReq.applicationType}"
+                                                           id="channelId"/>
+                                                    <input type="hidden" th:value="${digipassReq.applicationId}"
+                                                           id="applicationId"/>
+                                                    <input type="hidden" th:value="${digipassReq.centralId}"
+                                                           id="centralId"/>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        </tbody>
+                                        <tbody th:if='${digipassReqList.size() <= 0}'>
+                                        <tr>
+                                            <td colspan="5" class="text-center text-danger" style="letter-spacing: 2px">
+                                                No records available.
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--generated opt image display ui-->
+                    <div class="col-lg-5 col-md-5 col-sm-6">
+                        <h5 style="color:black;font-weight:bold;"><i>Generated OTP Image</i></h5>
+                        <div id="serId" style="color:transparent;"><span>Serial key  :  </span><span
+                                id="serialKeyId"></span></div>
+                        <div id="actId" style="color:transparent;"><span>Activation code  :  </span><span
+                                id="activationCodeId"></span></div>
+                        <div><img id="imageId"/></div>
+
+                        <div class="row" style="margin-top:15px;">
+                            <div class="col-md-4" style="margin-left:10px;">
+                                <span id="activateDataId"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div th:replace="common/footer :: footer"></div>
+        <div th:replace="common/footer :: scriptone"></div>
+    </div>
+</div>
+<script>
+    function getActivationCode(cID, aID, aType) {
+
+        $("#serialKeyId").html("");
+        $("#activationCodeId").html("");
+        $("#imageId").attr("src", "");
+
+        let activationCodeRequest = {
+            centralId: cID,
+            applicationId: aID,
+            channelId: aType
+
+        };
+
+        $.ajax({
+            url: RELATIVE_URL_INIT + `api/getActivationCode`,
+            type: 'POST',
+            contentType: 'application/json;charset=UTF-8',
+            data : JSON.stringify(activationCodeRequest),
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader ("Authorization", "Basic " + btoa(localAuthCommon.username + ":" + localAuthCommon.password));
+            },
+            success: (response) => {
+                let image = response.data.url;
+                let sk = response.data.serialKey;
+                let ac = response.data.activationCode;
+
+                $("#serialKeyId").html(sk);
+                $("#serId").attr("style", "color:black;padding:10px;");
+                $("#activationCodeId").html(ac);
+                $("#actId").attr("style", "color:black;padding:10px;");
+                $("#imageId").attr("src", image);
+            },
+            error: (err) => {
+                console.log(err)
+            }
+        });
+
+    }
+
+
+</script>
+
+
+</body>
+</html>

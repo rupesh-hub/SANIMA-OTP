@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Get Activation code</title>
+</head>
+<body>
+<form action="#" th:action="@{/view/getSerialKey}" th:object="${activateDigipassPojo}" method="post">
+    <p>Channel Id: <input name="channelId" required  type="text" value="APP1_MB" default="APP1_MB"/></p>
+    <p>Central Id: <input name="centralId" required type="text"/></p>
+    <p>Application Id: <input name="applicationId" required type="text"/></p>
+    <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+</form>
+</body>
+</html>
